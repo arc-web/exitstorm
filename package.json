@@ -1,0 +1,38 @@
+{
+  "name": "exitstorm",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Community-powered micro-SaaS exit machine",
+  "license": "MIT",
+  "author": "OpenClaw <jake@localbosses.org>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openclaw/exitstorm.git"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.15.4",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "db:migrate": "pnpm --filter @exitstorm/db migrate",
+    "bot:dev": "pnpm --filter @exitstorm/discord-bot dev",
+    "bot:start": "pnpm --filter @exitstorm/discord-bot start",
+    "web:dev": "pnpm --filter @exitstorm/web dev",
+    "api:dev": "pnpm --filter @exitstorm/api dev"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "turbo": "^2.3.0",
+    "typescript": "^5.6.0",
+    "prettier": "^3.4.0",
+    "eslint": "^9.15.0",
+    "@typescript-eslint/eslint-plugin": "^8.15.0",
+    "@typescript-eslint/parser": "^8.15.0"
+  }
+}

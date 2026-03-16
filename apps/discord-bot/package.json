@@ -1,0 +1,37 @@
+{
+  "name": "@exitstorm/discord-bot",
+  "version": "0.1.0",
+  "description": "ExitStorm Discord bot — slash commands, voting, and React UIs",
+  "type": "module",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "register": "tsx src/register-commands.ts",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@exitstorm/core": "workspace:*",
+    "@exitstorm/analyzer": "workspace:*",
+    "@exitstorm/graphics": "workspace:*",
+    "@exitstorm/team-engine": "workspace:*",
+    "@exitstorm/db": "workspace:*",
+    "@answeroverflow/discordjs-react": "^0.0.36",
+    "@discordjs/opus": "^0.10.0",
+    "@discordjs/voice": "^0.19.1",
+    "better-sqlite3": "^11.0.0",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.8",
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.2.39",
+    "tsx": "^4.6.0",
+    "typescript": "^5.6.0"
+  }
+}
