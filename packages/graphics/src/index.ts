@@ -112,7 +112,7 @@ Title: "${title} — Market Position". Style: Dark mode, clean quadrant chart.`;
 
 // ── Public API ─────────────────────────────────────────────────────────────
 
-const DEFAULT_SCRIPT = '/opt/homebrew/lib/node_modules/clawdbot/skills/nano-banana-pro/scripts/generate_image.py';
+const DEFAULT_SCRIPT = process.env.EXITSTORM_IMAGE_SCRIPT ?? '';
 
 /**
  * Generate 3 supporting graphics for a project financial analysis.
@@ -125,6 +125,11 @@ export async function generateProjectGraphics(
   const outputDir = options.outputDir ?? process.cwd();
   const scriptPath = options.generatorScript ?? DEFAULT_SCRIPT;
   const timeout = options.timeout ?? 120_000;
+
+  if (!scriptPath) {
+    console.log('[graphics] No image generation script configured (set EXITSTORM_IMAGE_SCRIPT). Skipping.');
+    return { pricingChart: null, exitChart: null, competitorLandscape: null };
+  }
 
   const ts = fileTimestamp();
   const slug = slugify(title);
