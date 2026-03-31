@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExitStorm - Turn Ideas Into Exits</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; color: #1a1a2e; background: #fff; line-height: 1.6; }
+
+  /* Hero */
+  .hero {
+    min-height: 90vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 80px 24px;
+    background: linear-gradient(180deg, #f8f9fb 0%, #fff 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(59,130,246,0.06) 0%, transparent 70%);
+  }
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    max-width: 800px;
+    position: relative;
+  }
+  .hero h1 span { color: #3b82f6; }
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 20px);
+    color: #64748b;
+    max-width: 600px;
+    margin: 24px auto 48px;
+    position: relative;
+  }
+  .hero-stats {
+    display: flex; gap: 48px; position: relative;
+  }
+  .hero-stat {
+    text-align: center;
+  }
+  .hero-stat-value {
+    font-size: 42px; font-weight: 800; color: #1a1a2e;
+    font-variant-numeric: tabular-nums;
+  }
+  .hero-stat-value.green { color: #10b981; }
+  .hero-stat-value.blue { color: #3b82f6; }
+  .hero-stat-value.amber { color: #f59e0b; }
+  .hero-stat-label {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #94a3b8; margin-top: 4px;
+  }
+
+  /* Sections */
+  section { padding: 100px 24px; max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #3b82f6; margin-bottom: 12px;
+  }
+  section h2 {
+    font-size: clamp(28px, 4vw, 40px); font-weight: 700; letter-spacing: -0.02em;
+    margin-bottom: 16px; line-height: 1.2;
+  }
+  section .lead {
+    font-size: 18px; color: #64748b; max-width: 640px; margin-bottom: 48px;
+  }
+
+  /* Pipeline */
+  .pipeline-section { background: #f8f9fb; max-width: 100%; padding: 100px 24px; }
+  .pipeline-inner { max-width: 1100px; margin: 0 auto; }
+  .pipeline {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0;
+    position: relative;
+  }
+  .pipeline-step {
+    text-align: center; padding: 24px 16px; position: relative;
+  }
+  .pipeline-step::after {
+    content: ''; position: absolute; right: -1px; top: 50%; transform: translateY(-50%);
+    width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent;
+    border-left: 8px solid #cbd5e1;
+  }
+  .pipeline-step:last-child::after { display: none; }
+  .pipeline-icon {
+    width: 56px; height: 56px; border-radius: 14px; margin: 0 auto 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+  .pipeline-icon.blue { background: rgba(59,130,246,0.1); }
+  .pipeline-icon.green { background: rgba(16,185,129,0.1); }
+  .pipeline-icon.amber { background: rgba(245,158,11,0.1); }
+  .pipeline-icon.purple { background: rgba(139,92,246,0.1); }
+  .pipeline-icon.rose { background: rgba(244,63,94,0.1); }
+  .pipeline-icon.teal { background: rgba(20,184,166,0.1); }
+  .pipeline-step h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .pipeline-step p { font-size: 13px; color: #64748b; }
+
+  /* Scoring Table */
+  .scoring-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .scoring-item {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 20px; border-radius: 12px; background: #f8f9fb;
+  }
+  .scoring-weight {
+    min-width: 48px; height: 48px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700; color: #fff;
+    background: #3b82f6;
+  }
+  .scoring-weight.heavy { background: #1e40af; }
+  .scoring-item h4 { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+  .scoring-item p { font-size: 13px; color: #64748b; }
+  .scoring-callout {
+    margin-top: 32px; padding: 24px; border-radius: 12px;
+    background: linear-gradient(135deg, #eff6ff, #f0fdf4);
+    border-left: 4px solid #3b82f6;
+  }
+  .scoring-callout p { font-size: 15px; color: #334155; }
+
+  /* Financial */
+  .financial-cards {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .fin-card {
+    padding: 32px; border-radius: 16px; background: #f8f9fb;
+  }
+  .fin-card h4 { font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+  .fin-card .value { font-size: 32px; font-weight: 800; margin-bottom: 4px; }
+  .fin-card .detail { font-size: 14px; color: #94a3b8; }
+  .valuation-table {
+    margin-top: 32px; width: 100%;
+    border-collapse: collapse;
+  }
+  .valuation-table th {
+    text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600;
+    color: #64748b; border-bottom: 2px solid #e2e8f0;
+  }
+  .valuation-table td {
+    padding: 12px 16px; font-size: 15px; border-bottom: 1px solid #f1f5f9;
+  }
+
+  /* Teams & Points */
+  .teams-section { background: #f8f9fb; max-width: 100%; padding: 100px 24px; }
+  .teams-inner { max-width: 1100px; margin: 0 auto; }
+  .milestone-track {
+    display: flex; align-items: center; gap: 0; margin-top: 32px; position: relative;
+  }
+  .milestone-track::before {
+    content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%);
+    transform: translateY(-50%);
+  }
+  .milestone {
+    flex: 1; text-align: center; position: relative; z-index: 1;
+  }
+  .milestone-dot {
+    width: 14px; height: 14px; border-radius: 50%; background: #3b82f6;
+    border: 3px solid #fff; margin: 0 auto 8px; box-shadow: 0 0 0 2px #3b82f6;
+  }
+  .milestone-label { font-size: 11px; color: #64748b; }
+  .milestone-pct { font-size: 13px; font-weight: 700; color: #1a1a2e; }
+  .role-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 32px;
+  }
+  .role-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 18px; border-radius: 10px; background: #fff;
+  }
+  .role-item span:first-child { font-size: 14px; font-weight: 500; }
+  .role-item span:last-child { font-size: 14px; font-weight: 700; color: #3b82f6; }
+
+  /* Investors */
+  .investor-section { border-top: 1px solid #e2e8f0; }
+  .investor-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+  }
+  .investor-card {
+    padding: 32px; border-radius: 16px; border: 1px solid #e2e8f0;
+  }
+  .investor-card h4 {
+    font-size: 17px; font-weight: 600; margin-bottom: 8px;
+  }
+  .investor-card p { font-size: 14px; color: #64748b; }
+  .investor-card .icon {
+    font-size: 28px; margin-bottom: 16px;
+  }
+
+  /* Footer */
+  .footer-cta {
+    text-align: center; padding: 100px 24px 60px;
+    background: linear-gradient(180deg, #fff 0%, #f8f9fb 100%);
+  }
+  .footer-cta h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 700; margin-bottom: 16px; }
+  .footer-cta p { font-size: 18px; color: #64748b; margin-bottom: 40px; }
+  .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .cta-btn {
+    padding: 16px 32px; border-radius: 10px; font-size: 16px; font-weight: 600;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+  }
+  .cta-btn.primary { background: #1a1a2e; color: #fff; }
+  .cta-btn.secondary { background: #f1f5f9; color: #1a1a2e; border: 1px solid #e2e8f0; }
+  .footer-bottom {
+    text-align: center; padding: 32px 24px; border-top: 1px solid #e2e8f0;
+    font-size: 14px; color: #94a3b8;
+  }
+
+  @media (max-width: 768px) {
+    .hero-stats { flex-direction: column; gap: 24px; }
+    .scoring-grid { grid-template-columns: 1fr; }
+    .financial-cards { grid-template-columns: 1fr; }
+    .investor-grid { grid-template-columns: 1fr; }
+    .pipeline { grid-template-columns: 1fr; }
+    .pipeline-step::after { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>Stop Building Things<br>That <span>Won't Sell</span></h1>
+  <p class="hero-sub">ExitStorm turns raw ideas into financial models, priority scores, and exit plans. Know if it's worth building before you write a line of code.</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-value green">8.1</div>
+      <div class="hero-stat-label">Priority Score</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value blue">$96K</div>
+      <div class="hero-stat-label">Projected ARR</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value amber">$1.15M</div>
+      <div class="hero-stat-label">Exit Valuation</div>
+    </div>
+  </div>
+</div>
+
+<!-- Pipeline -->
+<div class="pipeline-section">
+  <div class="pipeline-inner">
+    <div class="section-label">The Pipeline</div>
+    <h2>From Idea to Exit in 6 Steps</h2>
+    <p class="lead">Every idea goes through the same rigorous process. No gut feelings. No guessing.</p>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="pipeline-icon blue">&#128161;</div>
+        <h4>Idea Input</h4>
+        <p>Title + description. That's all it takes.</p>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-icon green">&#128200;</div>
+        <h4>Financial Model</h4>
+        <p>ARR projections, valuation, breakeven timeline.</p>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-icon amber">&#127919;</div>
+        <h4>Priority Score</h4>
+        <p>8 weighted criteria. 0-10 score. Build or skip.</p>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-icon purple">&#128101;</div>
+        <h4>Team Assembly</h4>
+        <p>Auto-matched from contributor history.</p>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-icon teal">&#128202;</div>
+        <h4>Milestone Tracking</h4>
+        <p>Points unlock as you hit real targets.</p>
+      </div>
+      <div class="pipeline-step">
+        <div class="pipeline-icon rose">&#128176;</div>
+        <h4>Exit</h4>
+        <p>List on Flippa/Acquire.com. Distribute proceeds.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scoring -->
+<section>
+  <div class="section-label">Scoring</div>
+  <h2>8 Criteria That Predict Exit-ability</h2>
+  <p class="lead">Not generic startup metrics. These are tuned for what Flippa and Acquire.com buyers actually look for.</p>
+  <div class="scoring-grid">
+    <div class="scoring-item">
+      <div class="scoring-weight heavy">15%</div>
+      <div><h4>ARR Quality</h4><p>How recurring and predictable is the revenue?</p></div>
+    </div>
+    <div class="scoring-item">
+      <div class="scoring-weight heavy">15%</div>
+      <div><h4>Rule of 40 Potential</h4><p>Growth + margin headroom within 12 months.</p></div>
+    </div>
+    <div class="scoring-item">
+      <div class="scoring-weight heavy">15%</div>
+      <div><h4>Build Speed</h4><p>Under 2 weeks = 10. Over a year = 1. Ship fast, flip fast.</p></div>
+    </div>
+    <div class="scoring-item">
+      <div class="scoring-weight heavy">15%</div>
+      <div><h4>Defensibility</h4><p>Proprietary data, network effects, or thin wrapper?</p></div>
+    </div>
+    <div class="scoring-item">
+      <div class="scoring-weight">10%</div>
+      <div><h4>Churn Achievability</h4><p>Embedded workflow tool or novelty single-use?</p></div>
+    </div>
+    <div class="scoring-item">
+      <div class="scoring-weight">10%</div>
+      <div><h4>Founder Independence</h4><p>Fully automated = 10. Founder-dependent = 2. Buyers want hands-off.</p></div>
+    </div>
+    <div class="scoring-item">
+      <div class="scoring-weight">10%</div>
+      <div><h4>Pricing Power</h4><p>Solves a $10K+/yr pain point, or commodity?</p></div>
+    </div>
+    <div class="scoring-item">
+      <div class="scoring-weight">10%</div>
+      <div><h4>Market Timing</h4><p>Riding a trend, or ahead of the market?</p></div>
+    </div>
+  </div>
+  <div class="scoring-callout">
+    <p><strong>Verdicts:</strong> Score under 5 = don't build. 5-7 = queue it. 7-8 = solid. 8+ = build first. The math is deterministic - AI provides the ratings, the weights are locked in code.</p>
+  </div>
+</section>
+
+<!-- Financial Modeling -->
+<section style="border-top: 1px solid #e2e8f0;">
+  <div class="section-label">Financial Modeling</div>
+  <h2>Know Your Exit Number Before You Code</h2>
+  <p class="lead">Every idea gets a complete financial model using acquisition multiples that match what buyers actually pay.</p>
+  <div class="financial-cards">
+    <div class="fin-card">
+      <h4>12-Month ARR</h4>
+      <div class="value" style="color: #10b981;">$96K</div>
+      <div class="detail">Realistic scenario</div>
+      <div style="margin-top: 12px; font-size: 13px; color: #94a3b8;">Conservative: $36K / Optimistic: $180K</div>
+    </div>
+    <div class="fin-card">
+      <h4>Valuation Range</h4>
+      <div class="value" style="color: #3b82f6;">$288K - $1.15M</div>
+      <div class="detail">8-12x ARR (B2B AI SaaS)</div>
+    </div>
+    <div class="fin-card">
+      <h4>Breakeven</h4>
+      <div class="value" style="color: #f59e0b;">8 mo</div>
+      <div class="detail">Exit window: 18-24 months</div>
+    </div>
+  </div>
+  <table class="valuation-table">
+    <thead>
+      <tr><th>Type</th><th>Multiple</th><th>Why</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>B2B AI SaaS</td><td><strong>8-12x ARR</strong></td><td>Highest demand from acquirers right now</td></tr>
+      <tr><td>B2C SaaS</td><td><strong>3-5x ARR</strong></td><td>Higher churn, lower switching costs</td></tr>
+      <tr><td>Micro-SaaS</td><td><strong>2.5-4.5x SDE</strong></td><td>Solo-buildable, under 3 months. SDE = ARR x 0.6</td></tr>
+      <tr><td>API Tools</td><td><strong>5-8x ARR</strong></td><td>Usage-based, sticky integration</td></tr>
+      <tr><td>Marketplace</td><td><strong>3-6x ARR</strong></td><td>Network effects offset by liquidity risk</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Teams & Points -->
+<div class="teams-section">
+  <div class="teams-inner">
+    <div class="section-label">Teams & Incentives</div>
+    <h2>Earn What You Contribute. No Equity Fights.</h2>
+    <p class="lead">Points replace equity negotiations. Earned by verified work, vested against real milestones, backed by a complete audit trail.</p>
+
+    <div class="role-grid">
+      <div class="role-item"><span>Lead Builder</span><span>35%</span></div>
+      <div class="role-item"><span>Co-Builder</span><span>20%</span></div>
+      <div class="role-item"><span>Designer / UX</span><span>15%</span></div>
+      <div class="role-item"><span>QA / Testing</span><span>10%</span></div>
+      <div class="role-item"><span>Growth / Marketing</span><span>10%</span></div>
+      <div class="role-item"><span>Community</span><span>5%</span></div>
+      <div class="role-item"><span>Docs / PM</span><span>5%</span></div>
+    </div>
+
+    <div style="margin-top: 48px;">
+      <h4 style="font-size: 15px; color: #64748b; margin-bottom: 24px;">Points unlock as the project hits real milestones:</h4>
+      <div class="milestone-track">
+        <div class="milestone"><div class="milestone-dot"></div><div class="milestone-pct">5%</div><div class="milestone-label">Kickoff</div></div>
+        <div class="milestone"><div class="milestone-dot"></div><div class="milestone-pct">20%</div><div class="milestone-label">MVP</div></div>
+        <div class="milestone"><div class="milestone-dot"></div><div class="milestone-pct">35%</div><div class="milestone-label">1st Customer</div></div>
+        <div class="milestone"><div class="milestone-dot"></div><div class="milestone-pct">50%</div><div class="milestone-label">$1K MRR</div></div>
+        <div class="milestone"><div class="milestone-dot"></div><div class="milestone-pct">65%</div><div class="milestone-label">$5K MRR</div></div>
+        <div class="milestone"><div class="milestone-dot"></div><div class="milestone-pct">80%</div><div class="milestone-label">Breakeven</div></div>
+        <div class="milestone"><div class="milestone-dot"></div><div class="milestone-pct">95%</div><div class="milestone-label">ARR Target</div></div>
+        <div class="milestone"><div class="milestone-dot" style="background: #10b981; box-shadow: 0 0 0 2px #10b981;"></div><div class="milestone-pct">100%</div><div class="milestone-label">Exit</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Investors -->
+<section class="investor-section">
+  <div class="section-label">For Investors</div>
+  <h2>Due Diligence, Automated</h2>
+  <p class="lead">Every project in the pipeline comes with structured data you can actually evaluate. No decks. No pitch theater. Just numbers.</p>
+  <div class="investor-grid">
+    <div class="investor-card">
+      <div class="icon">&#128202;</div>
+      <h4>Standardized Financial Models</h4>
+      <p>Every project gets the same analysis: 3-scenario ARR, valuation ranges using real acquisition multiples, breakeven timeline. Compare apples to apples across the entire pipeline.</p>
+    </div>
+    <div class="investor-card">
+      <div class="icon">&#127919;</div>
+      <h4>8-Criteria Scoring</h4>
+      <p>Weighted for exit-ability, not vanity. Founder Independence, Build Speed, and Defensibility are scored explicitly. The math is deterministic and auditable.</p>
+    </div>
+    <div class="investor-card">
+      <div class="icon">&#128101;</div>
+      <h4>Team Composition Data</h4>
+      <p>See who's building what, matched by verified contribution history. No self-reported skills. Every team member earned their role through tracked, evidenced work.</p>
+    </div>
+    <div class="investor-card">
+      <div class="icon">&#128274;</div>
+      <h4>Complete Audit Trail</h4>
+      <p>Every contribution has a source, evidence, and timestamp. Daily point caps, vouch limits, and anti-gaming constraints mean the data is trustworthy enough to allocate real money against.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer CTA -->
+<div class="footer-cta">
+  <h2>Ready to Build Something Worth Selling?</h2>
+  <p>ExitStorm is open source. Analyze your first idea in minutes.</p>
+  <div class="cta-buttons">
+    <a href="https://github.com/arc-web/exitstorm" class="cta-btn primary">Start Building &#8594;</a>
+    <a href="https://github.com/arc-web/exitstorm" class="cta-btn secondary">View the Engine &#8594;</a>
+  </div>
+</div>
+
+<div class="footer-bottom">
+  ExitStorm - Built by Advertising Report Card - MIT License
+</div>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+name = "exitstorm"
+type = "javascript"
+main = "src/index.ts"
+
+# Cloudflare Pages build settings
+[env.production]
+name = "exitstorm"
+
+# Build output directory for Cloudflare Pages
+[build]
+command = "echo 'Static site - no build needed'"
+cwd = "./"
+watch_paths = []
