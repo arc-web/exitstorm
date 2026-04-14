@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+# Superpowers cache
+.superpowers/
+
 # Build output
 dist/
 .next/

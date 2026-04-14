@@ -182,7 +182,7 @@ CREATE INDEX IF NOT EXISTS idx_analysis_runs_time ON analysis_runs(time_range_st
 
 CREATE TABLE IF NOT EXISTS github_events (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  event_id TEXT NOT NULL UNIQUE,  -- e.g. "pr_merged:openclaw/openclaw:42"
+  event_id TEXT NOT NULL UNIQUE,  -- e.g. "pr_merged:arc-web/exitstorm:42"
   event_type TEXT NOT NULL,
   repo TEXT NOT NULL,
   github_author TEXT NOT NULL,
