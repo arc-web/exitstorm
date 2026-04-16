@@ -8,11 +8,39 @@ import { buildAnalysisPrompt } from './prompt.js';
 
 // ── AI Providers ───────────────────────────────────────────────────────────
 
+const ANALYSIS_MODEL = process.env.EXITSTORM_ANALYSIS_MODEL ?? 'claude-haiku-4-5-20250315';
+
+/** Fetch with a timeout and up to `retries` retry attempts on network errors. */
+async function fetchWithRetry(
+  url: string,
+  init: RequestInit,
+  timeoutMs = 30_000,
+  retries = 2,
+): Promise<Response> {
+  let lastErr: unknown;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, { ...init, signal: controller.signal });
+      clearTimeout(timer);
+      return res;
+    } catch (err) {
+      clearTimeout(timer);
+      lastErr = err;
+      if (attempt < retries) {
+        await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
+      }
+    }
+  }
+  throw lastErr;
+}
+
 async function callAnthropic(apiKey: string, prompt: string): Promise<string> {
   const { default: Anthropic } = await import('@anthropic-ai/sdk');
   const client = new Anthropic({ apiKey });
   const response = await client.messages.create({
-    model: 'claude-haiku-4-5-20250315',
+    model: ANALYSIS_MODEL,
     max_tokens: 1800,
     messages: [{ role: 'user', content: prompt }],
   });
@@ -21,7 +49,12 @@ async function callAnthropic(apiKey: string, prompt: string): Promise<string> {
 }
 
 async function callOpenAI(apiKey: string, prompt: string): Promise<string> {
-  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+  if (!apiKey?.startsWith('sk-')) {
+    throw new Error(
+      'OPENAI_API_KEY is missing or malformed. Set it to a valid sk-* key before using the OpenAI provider.',
+    );
+  }
+  const res = await fetchWithRetry('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${apiKey}`,

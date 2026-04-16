@@ -63,6 +63,18 @@ pnpm build
 pnpm test
 ```
 
+### Environment variables
+
+Copy `.env.example` to `.env` and fill in at least one AI provider key:
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `ANTHROPIC_API_KEY` | One of these two | - | Anthropic API key (`sk-ant-api*`). Preferred provider. |
+| `OPENAI_API_KEY` | One of these two | - | OpenAI key (`sk-*`). Fallback if Anthropic is unavailable or unset. |
+| `EXITSTORM_ANALYSIS_MODEL` | No | `claude-haiku-4-5-20250315` | Override the Anthropic model used for analysis. |
+| `DB_PATH` | No | `data/contributions.db` | Path to the SQLite database file. |
+| `EXITSTORM_IMAGE_SCRIPT` | No | - | Path to an external image generation script. Graphics are skipped if unset. |
+
 ### CLI usage
 
 ```bash
