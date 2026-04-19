@@ -1,15 +1,5 @@
 <div align="center">
 
-<a href="https://arc-web.github.io/exitstorm/">
-  <img src="https://img.shields.io/badge/🎬_Interactive_Presentation-View_Live-7B2FBE?style=for-the-badge&labelColor=0F0F1A&color=7B2FBE" alt="View Interactive Presentation" />
-</a>
-
-</div>
-
----
-
-<div align="center">
-
 # ExitStorm
 
 ### Idea Analysis and Exit Pipeline Engine
@@ -72,6 +62,18 @@ pnpm install
 pnpm build
 pnpm test
 ```
+
+### Environment variables
+
+Copy `.env.example` to `.env` and fill in at least one AI provider key:
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `ANTHROPIC_API_KEY` | One of these two | - | Anthropic API key (`sk-ant-api*`). Preferred provider. |
+| `OPENAI_API_KEY` | One of these two | - | OpenAI key (`sk-*`). Fallback if Anthropic is unavailable or unset. |
+| `EXITSTORM_ANALYSIS_MODEL` | No | `claude-haiku-4-5-20250315` | Override the Anthropic model used for analysis. |
+| `DB_PATH` | No | `data/contributions.db` | Path to the SQLite database file. |
+| `EXITSTORM_IMAGE_SCRIPT` | No | - | Path to an external image generation script. Graphics are skipped if unset. |
 
 ### CLI usage
 
