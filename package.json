@@ -19,6 +19,7 @@
     "dev": "turbo run dev",
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
+    "check:site": "node scripts/check-site.mjs",
     "clean": "turbo run clean && rm -rf node_modules",
     "db:migrate": "pnpm --filter @exitstorm/db migrate",
     "bot:dev": "pnpm --filter @exitstorm/discord-bot dev",

@@ -1,0 +1,26 @@
+{
+  "site": "exitstorm",
+  "domain": "exitstorm.com",
+  "bucket": "exitstorm",
+  "source": "src",
+  "paths": {
+    "finance": "finance"
+  },
+  "registryAliases": {
+    "exitstorm": "finance"
+  },
+  "plane": {
+    "workspace": "WEBDESIGN",
+    "project": "WEBDESIGN",
+    "module": "Cloudflare",
+    "issue": "WEBDESIGN-16"
+  },
+  "github": {
+    "repo": "arc-web/exitstorm"
+  },
+  "deploy": {
+    "mode": "tracked-immediate",
+    "productionBranch": "main",
+    "runnerPolicy": "local-openbao-deploy"
+  }
+}

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Finance Operators - ExitStorm</title>
+  <meta name="description" content="ExitStorm gives Finance Operators pre-broker deal flow with pre-vetted teams. See deals before the broker does - with the team, metrics, and exit model already built.">
+  <link rel="canonical" href="https://exitstorm.com/finance/">
+
+  <meta property="og:title" content="ExitStorm for Finance Operators">
+  <meta property="og:description" content="Pre-broker deal flow. Pre-vetted teams. No brokers. See deals before the market does.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://exitstorm.com/finance/">
+  <meta property="og:site_name" content="ExitStorm">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ExitStorm for Finance Operators">
+  <meta name="twitter:description" content="Pre-broker deal flow. Pre-vetted teams. No brokers. See deals before the market does.">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <style>
+    :root {
+      --bg: #060910;
+      --bg-2: #0c1117;
+      --bg-3: #111820;
+      --surface: #141c26;
+      --surface-2: #1a2333;
+      --border: #1e2d3d;
+      --border-2: #243447;
+      --text: #e8edf5;
+      --text-2: #8fa3b8;
+      --text-3: #4a6278;
+      --teal: #00d4aa;
+      --teal-glow: rgba(0,212,170,0.12);
+      --orange: #ff6b35;
+      --orange-glow: rgba(255,107,53,0.12);
+      --purple: #7c5cfc;
+      --purple-dim: #6b4de0;
+      --purple-glow: rgba(124,92,252,0.12);
+      --purple-glow-strong: rgba(124,92,252,0.22);
+      --accent: var(--purple);
+      --accent-glow: var(--purple-glow);
+      --accent-glow-strong: var(--purple-glow-strong);
+      --font: 'Inter', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(6,9,16,0.85); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; }
+    .nav-logo span { color: var(--teal); }
+    .nav-links { display: flex; align-items: center; gap: 2rem; font-size: 0.875rem; color: var(--text-2); }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links .active { color: var(--purple); }
+    .nav-cta { background: var(--purple); color: #fff; font-weight: 600; font-size: 0.875rem; padding: 0.5rem 1.25rem; border-radius: 6px; transition: opacity 0.2s; }
+    .nav-cta:hover { opacity: 0.85; }
+    @media (max-width: 768px) { .nav-links { display: none; } }
+
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 8rem 2rem 4rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px; opacity: 0.3;
+      mask-image: radial-gradient(ellipse 80% 60% at center, black, transparent);
+    }
+    .hero-glow {
+      position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%);
+      width: 800px; height: 400px;
+      background: radial-gradient(ellipse, var(--purple-glow-strong) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--surface); border: 1px solid var(--border-2);
+      border-radius: 100px; padding: 0.375rem 1rem;
+      font-size: 0.8rem; color: var(--purple); font-weight: 500;
+      margin-bottom: 2rem; position: relative; z-index: 1;
+    }
+    .badge-dot { width: 6px; height: 6px; background: var(--purple); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1.1;
+      max-width: 800px; margin-bottom: 1.5rem; position: relative; z-index: 1;
+    }
+    .hero h1 em { font-style: normal; color: var(--purple); }
+    .hero-sub { font-size: 1.1rem; color: var(--text-2); max-width: 580px; margin-bottom: 1rem; position: relative; z-index: 1; }
+    .hero-visceral { font-size: 0.95rem; color: var(--text-3); font-family: var(--mono); margin-bottom: 2.5rem; position: relative; z-index: 1; }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; }
+    .btn-primary { background: var(--purple); color: #fff; font-weight: 700; padding: 0.875rem 2rem; border-radius: 8px; font-size: 1rem; transition: opacity 0.2s, transform 0.2s; display: inline-block; }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-ghost { background: transparent; color: var(--text-2); border: 1px solid var(--border-2); padding: 0.875rem 2rem; border-radius: 8px; font-size: 1rem; transition: border-color 0.2s, color 0.2s; display: inline-block; }
+    .btn-ghost:hover { border-color: var(--purple); color: var(--text); }
+
+    section { padding: 6rem 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--purple); margin-bottom: 1rem; }
+    h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.25rem; }
+    .text-muted { color: var(--text-2); }
+
+    .problem-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; max-width: 720px; margin: 2.5rem auto 0; }
+    .problem-line { display: flex; align-items: flex-start; gap: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; }
+    .problem-line .pill { flex-shrink: 0; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; background: var(--purple-glow); color: var(--purple); border-radius: 4px; padding: 0.2rem 0.6rem; margin-top: 0.15rem; }
+    .problem-line p { font-size: 0.95rem; color: var(--text-2); }
+    .problem-line p strong { color: var(--text); }
+    .problem-connector { text-align: center; margin-top: 2.5rem; font-size: 1.1rem; font-weight: 700; color: var(--text); }
+    .problem-connector span { color: var(--purple); }
+
+    .value-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+    .value-card { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--purple); border-radius: 10px; padding: 1.75rem; transition: box-shadow 0.2s; }
+    .value-card:hover { box-shadow: 0 0 24px var(--purple-glow); }
+    .value-icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+    .value-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .value-card p { font-size: 0.9rem; color: var(--text-2); line-height: 1.6; }
+
+    .triangle-section { text-align: center; }
+    .triangle-wrap { position: relative; max-width: 560px; margin: 3rem auto 0; }
+    .role-node { background: var(--surface-2); border: 1px solid var(--border-2); border-radius: 12px; padding: 1.25rem 1.5rem; text-align: center; width: 160px; transition: box-shadow 0.2s; }
+    .role-node.active { background: var(--purple-glow); border-color: var(--purple); box-shadow: 0 0 32px var(--purple-glow-strong); }
+    .role-node.active .role-node-name { color: var(--purple); }
+    .role-node.dim { opacity: 0.55; }
+    .role-node.dim:hover { opacity: 0.85; }
+    .role-node-emoji { font-size: 1.75rem; margin-bottom: 0.4rem; }
+    .role-node-name { font-weight: 700; font-size: 0.9rem; }
+    .role-node-desc { font-size: 0.75rem; color: var(--text-3); margin-top: 0.25rem; }
+    .triangle-note { margin-top: 2rem; font-size: 0.95rem; color: var(--text-2); }
+
+    .guarantee-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 2.5rem; }
+    .guarantee-card { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--purple); border-radius: 10px; padding: 1.5rem; }
+    .guarantee-card.universal { border-left-color: var(--border-2); }
+    .guarantee-card .g-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--purple); margin-bottom: 0.75rem; }
+    .guarantee-card.universal .g-label { color: var(--text-3); }
+    .guarantee-card p { font-size: 0.95rem; color: var(--text-2); }
+    .guarantee-card p strong { color: var(--text); }
+
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 3rem; max-width: 640px; margin-left: auto; margin-right: auto; }
+    .pricing-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; position: relative; }
+    .pricing-card.featured { border-color: var(--purple); box-shadow: 0 0 32px var(--purple-glow); }
+    .pricing-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--purple); color: #fff; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.2rem 0.75rem; border-radius: 100px; }
+    .pricing-label { font-size: 0.8rem; color: var(--text-3); margin-bottom: 0.5rem; }
+    .pricing-price { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; }
+    .pricing-price span { font-size: 1rem; font-weight: 400; color: var(--text-3); }
+    .pricing-save { font-size: 0.8rem; color: var(--purple); margin-top: 0.25rem; }
+    .pricing-card hr { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+    .pricing-note { font-size: 0.8rem; color: var(--text-3); text-align: center; margin-top: 1.5rem; }
+
+    #apply { background: var(--bg-2); }
+    .antisell { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+    @media (max-width: 640px) { .antisell { grid-template-columns: 1fr; } }
+    .antisell-block h3 { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; }
+    .antisell-block h3.yes { color: var(--purple); }
+    .antisell-block h3.no { color: var(--text-3); }
+    .antisell-block ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .antisell-block ul li { font-size: 0.9rem; color: var(--text-2); display: flex; gap: 0.6rem; }
+    .antisell-block ul li::before { flex-shrink: 0; font-size: 0.85rem; }
+    .antisell-block.yes-block ul li::before { content: '✓'; color: var(--purple); }
+    .antisell-block.no-block ul li::before { content: '✗'; color: var(--text-3); }
+
+    .apply-form { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 2.5rem; max-width: 600px; margin: 0 auto; }
+    .apply-form h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .apply-form .form-sub { font-size: 0.9rem; color: var(--text-2); margin-bottom: 2rem; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-2); margin-bottom: 0.4rem; }
+    .form-group input, .form-group textarea {
+      width: 100%; background: var(--bg-2); border: 1px solid var(--border-2);
+      border-radius: 8px; padding: 0.75rem 1rem;
+      color: var(--text); font-family: var(--font); font-size: 0.95rem;
+      transition: border-color 0.2s; outline: none;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--purple); }
+    .form-group input[aria-invalid="true"], .form-group textarea[aria-invalid="true"] { border-color: #ff4d4d; }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .field-error { font-size: 0.78rem; color: #ff6b6b; margin-top: 0.3rem; }
+    .form-submit { width: 100%; background: var(--purple); color: #fff; font-weight: 700; font-size: 1rem; padding: 0.875rem; border: none; border-radius: 8px; cursor: pointer; transition: opacity 0.2s; margin-top: 0.5rem; }
+    .form-submit:hover { opacity: 0.88; }
+    .form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .form-success { text-align: center; padding: 2rem; font-size: 1.1rem; color: var(--purple); font-weight: 600; }
+    .form-success p { color: var(--text-2); font-size: 0.9rem; margin-top: 0.5rem; font-weight: 400; }
+
+    footer { padding: 3rem 2rem; text-align: center; color: var(--text-3); font-size: 0.8rem; border-top: 1px solid var(--border); }
+    footer a { color: var(--teal); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main-content" style="position:absolute;top:0;left:0;background:var(--purple);color:#fff;padding:0.75rem 1rem;z-index:999;transform:translateY(-100%);transition:transform 0.2s;font-size:0.875rem;font-weight:600;" onfocus="this.style.transform='translateY(0)'" onblur="this.style.transform='translateY(-100%)'">Skip to main content</a>
+
+<nav>
+  <a href="/" class="nav-logo">⚡ Exit<span>Storm</span></a>
+  <div class="nav-links">
+    <a href="/builders/">Builders</a>
+    <a href="/owners/">Owners</a>
+    <a href="/finance/" class="active">Finance</a>
+    <a href="#apply" class="nav-cta">Apply Now</a>
+  </div>
+</nav>
+
+<main id="main-content">
+
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-badge" data-aos="fade-down">
+    <span class="badge-dot"></span>
+    For Investors &amp; Acquirers
+  </div>
+  <h1 data-aos="fade-up" data-aos-delay="50">Pre-broker deal flow.<br><em>Stop paying for access you should already have.</em></h1>
+  <p class="hero-sub" data-aos="fade-up" data-aos-delay="100">ExitStorm gives Finance Operators first look at deals - with the team verified, the metrics real, and the exit model already built. No brokers. No middlemen.</p>
+  <p class="hero-visceral" data-aos="fade-up" data-aos-delay="150">// you arrive before the market, not after</p>
+  <div class="hero-actions" data-aos="fade-up" data-aos-delay="200">
+    <a href="#apply" class="btn-primary">Apply as a Finance Operator</a>
+    <a href="#how-it-works" class="btn-ghost">See how it works</a>
+  </div>
+</section>
+
+<section id="how-it-works" style="background:var(--bg-2);">
+  <div class="container" style="text-align:center;">
+    <p class="section-label" data-aos="fade-up">The problem</p>
+    <h2 data-aos="fade-up" data-aos-delay="50">Why most deal flow is already cold by the time you see it</h2>
+    <div class="problem-grid" data-aos="fade-up" data-aos-delay="100">
+      <div class="problem-line">
+        <span class="pill">Access</span>
+        <p><strong>You see the deal.</strong> A broker already took 10-15%. Because you weren't in the room when the team decided to sell.</p>
+      </div>
+      <div class="problem-line">
+        <span class="pill">Due Diligence</span>
+        <p><strong>You get the pitch deck.</strong> No team visibility. Because the founders left after close and no one told you who actually built it.</p>
+      </div>
+      <div class="problem-line">
+        <span class="pill">Post-Acquisition</span>
+        <p><strong>You closed the deal.</strong> No operator to run it. Because the acquisition didn't come with the people who knew how it worked.</p>
+      </div>
+    </div>
+    <div class="problem-connector" data-aos="fade-up" data-aos-delay="150">
+      ExitStorm puts you in the room first. <span>Every time.</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <p class="section-label" data-aos="fade-up">What you get</p>
+    <h2 data-aos="fade-up" data-aos-delay="50">What first-mover access actually looks like</h2>
+    <div class="value-grid">
+      <div class="value-card" data-aos="fade-up" data-aos-delay="60">
+        <div class="value-icon">🔭</div>
+        <h3>Pre-broker deal flow</h3>
+        <p>You see assets at team stage, not broker stage. The multiple hasn't been marked up. The team is still intact.</p>
+      </div>
+      <div class="value-card" data-aos="fade-up" data-aos-delay="120">
+        <div class="value-icon">✅</div>
+        <h3>Pre-vetted teams, not pitch decks</h3>
+        <p>Every deal comes with a Builder and Owner already verified. You know who built it and who ran it before you spend an hour on diligence.</p>
+      </div>
+      <div class="value-card" data-aos="fade-up" data-aos-delay="180">
+        <div class="value-icon">🔄</div>
+        <h3>Post-acquisition operators ready</h3>
+        <p>The team doesn't evaporate at close. Builders and Owners in the ecosystem are available to operate what you acquire.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--bg-2);" id="ecosystem">
+  <div class="container triangle-section">
+    <p class="section-label" data-aos="fade-up">The ecosystem</p>
+    <h2 data-aos="fade-up" data-aos-delay="50">Three roles. One room.</h2>
+    <p class="text-muted" style="max-width:520px;margin:0 auto;" data-aos="fade-up" data-aos-delay="100">Remove any one role and the room doesn't work. ExitStorm enforces the ratio.</p>
+
+    <div class="triangle-wrap" data-aos="fade-up" data-aos-delay="150">
+      <div style="display:flex;justify-content:center;margin-bottom:0.5rem;">
+        <a href="/builders/" class="role-node dim" style="text-decoration:none;">
+          <div class="role-node-emoji">🏗️</div>
+          <div class="role-node-name">Builder</div>
+          <div class="role-node-desc">Ships the product</div>
+        </a>
+      </div>
+
+      <svg viewBox="0 0 400 80" style="width:100%;max-width:400px;display:block;margin:0 auto;" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <line x1="130" y1="10" x2="60" y2="70" stroke="#1e2d3d" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <line x1="270" y1="10" x2="340" y2="70" stroke="#1e2d3d" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <text x="60" y="38" fill="#4a6278" font-size="9" font-family="Inter,sans-serif" font-weight="600" text-anchor="middle" transform="rotate(-30,60,38)">ships product</text>
+        <text x="340" y="38" fill="#4a6278" font-size="9" font-family="Inter,sans-serif" font-weight="600" text-anchor="middle" transform="rotate(30,340,38)">models exit</text>
+        <line x1="60" y1="72" x2="340" y2="72" stroke="#1e2d3d" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <text x="200" y="67" fill="#4a6278" font-size="9" font-family="Inter,sans-serif" font-weight="600" text-anchor="middle">funds &amp; directs</text>
+      </svg>
+
+      <div style="display:flex;justify-content:space-between;margin-top:0.25rem;">
+        <a href="/owners/" class="role-node dim" style="text-decoration:none;">
+          <div class="role-node-emoji">💼</div>
+          <div class="role-node-name">Owner</div>
+          <div class="role-node-desc">Directs &amp; distributes</div>
+        </a>
+        <div class="role-node active">
+          <div class="role-node-emoji">📈</div>
+          <div class="role-node-name">Finance</div>
+          <div class="role-node-desc">Models the exit</div>
+        </div>
+      </div>
+    </div>
+    <p class="triangle-note" data-aos="fade-up" data-aos-delay="200">You're the Finance Operator. <a href="/builders/" style="color:var(--purple);">Builders</a> and <a href="/owners/" style="color:var(--purple);">Owners</a> are already in the room.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <p class="section-label" data-aos="fade-up">Guarantee</p>
+    <h2 data-aos="fade-up" data-aos-delay="50">What we put our name behind</h2>
+    <div class="guarantee-cards">
+      <div class="guarantee-card" data-aos="fade-up" data-aos-delay="60">
+        <div class="g-label">For Finance Operators</div>
+        <p><strong>10+ qualified assets per quarter</strong> or we refund your first month. No negotiation.</p>
+      </div>
+      <div class="guarantee-card universal" data-aos="fade-up" data-aos-delay="120">
+        <div class="g-label">All Members</div>
+        <p><strong>Double growth in 12 months</strong> or your membership extends free until you hit it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--bg-2);">
+  <div class="container" style="text-align:center;">
+    <p class="section-label" data-aos="fade-up">Membership</p>
+    <h2 data-aos="fade-up" data-aos-delay="50">One room. One price.</h2>
+    <p class="text-muted" data-aos="fade-up" data-aos-delay="100">5 Finance Operators per month. When the Finance role fills, it closes.</p>
+    <div class="pricing-grid" data-aos="fade-up" data-aos-delay="150">
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Best Value</div>
+        <div class="pricing-label">Annual</div>
+        <div class="pricing-price">$497<span>/mo</span></div>
+        <div class="pricing-save">Saves ~$1,200/yr vs monthly</div>
+        <hr>
+        <a href="#apply" class="btn-primary" style="display:block;text-align:center;">Apply as a Finance Operator</a>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-label">Monthly</div>
+        <div class="pricing-price">$997<span>/mo</span></div>
+        <div class="pricing-save" style="color:var(--text-3);">No annual commitment</div>
+        <hr>
+        <a href="#apply" class="btn-ghost" style="display:block;text-align:center;">Apply as a Finance Operator</a>
+      </div>
+    </div>
+    <p class="pricing-note" data-aos="fade-up" data-aos-delay="200">Role ratios enforced. All three roles must be present for the room to function.</p>
+  </div>
+</section>
+
+<section id="apply">
+  <div class="container">
+    <p class="section-label" style="text-align:center;" data-aos="fade-up">Apply</p>
+    <h2 style="text-align:center;" data-aos="fade-up" data-aos-delay="50">Is this for you?</h2>
+
+    <div class="antisell" data-aos="fade-up" data-aos-delay="100" style="max-width:720px;margin:2rem auto;">
+      <div class="antisell-block yes-block">
+        <h3 class="yes">This is for you if...</h3>
+        <ul>
+          <li>You're tired of seeing deals after a broker already took their cut</li>
+          <li>You want to invest in teams, not just metrics on a PDF</li>
+          <li>You need post-acquisition operators, not just a transfer of keys</li>
+        </ul>
+      </div>
+      <div class="antisell-block no-block">
+        <h3 class="no">This is NOT for you if...</h3>
+        <ul>
+          <li>You only operate at $10M+ exits - this is micro-SaaS, not enterprise M&A</li>
+          <li>You want to acquire and flip without keeping a team in place</li>
+          <li>You're not willing to model deals at team stage before they're market-ready</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="apply-form" data-aos="fade-up" data-aos-delay="150">
+      <h3>Apply as a Finance Operator</h3>
+      <p class="form-sub">Tell us what kind of assets you're looking for and your investment range. We review every application.</p>
+      <form id="apply-form" novalidate>
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+        <input type="hidden" name="role" value="Finance Operator">
+
+        <div class="form-group">
+          <label for="name">Full name</label>
+          <input type="text" id="name" name="name" autocomplete="name" placeholder="Your name">
+          <div class="field-error" id="name-error" role="alert" hidden></div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com">
+          <div class="field-error" id="email-error" role="alert" hidden></div>
+        </div>
+
+        <div class="form-group">
+          <label for="use_case">What are you bringing to the room?</label>
+          <textarea id="use_case" name="use_case" placeholder="What kind of assets interest you? What's your typical investment range? What do you bring post-acquisition?"></textarea>
+        </div>
+
+        <button type="submit" class="form-submit">Apply as a Finance Operator</button>
+      </form>
+      <div class="form-success" id="form-success" style="display:none;">
+        Application received.
+        <p>We'll review and be in touch within 48 hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div style="margin-bottom:0.75rem;"><span style="font-weight:700;color:var(--text);">⚡ ExitStorm</span></div>
+  <p>Closed operator network. Builders, Owners, Finance Operators.</p>
+  <p style="margin-top:1rem;color:var(--text-3);">© 2026 ExitStorm. All rights reserved. · <a href="/">Home</a></p>
+</footer>
+
+<script>
+  AOS.init({ once: true, duration: 600, offset: 60 });
+
+  function setFieldError(field, msg) {
+    field.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    const err = document.getElementById(field.id + '-error');
+    if (err) { err.textContent = msg; err.hidden = !msg; }
+  }
+
+  const nameField = document.getElementById('name');
+  const emailField = document.getElementById('email');
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  nameField.addEventListener('blur', () => {
+    setFieldError(nameField, nameField.value.trim() ? '' : 'Name is required.');
+  });
+  emailField.addEventListener('blur', () => {
+    const v = emailField.value.trim();
+    setFieldError(emailField, !v ? 'Email is required.' : !emailRe.test(v) ? 'Enter a valid email address.' : '');
+  });
+
+  document.getElementById('apply-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const name = nameField.value.trim();
+    const email = emailField.value.trim();
+    setFieldError(nameField, name ? '' : 'Name is required.');
+    setFieldError(emailField, !email ? 'Email is required.' : !emailRe.test(email) ? 'Enter a valid email address.' : '');
+    if (!name || !email || !emailRe.test(email)) return;
+
+    const btn = this.querySelector('.form-submit');
+    btn.textContent = 'Submitting...';
+    btn.disabled = true;
+
+    const data = { name, email, role: 'Finance Operator', use_case: document.getElementById('use_case').value.trim() };
+    const gotcha = this.querySelector('[name="_gotcha"]');
+    if (gotcha && gotcha.value) { document.getElementById('form-success').style.display = 'block'; this.style.display = 'none'; return; }
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const json = await res.json();
+      if (json.ok) {
+        this.style.display = 'none';
+        document.getElementById('form-success').style.display = 'block';
+      } else {
+        btn.textContent = json.error || 'Something went wrong - try again';
+        btn.disabled = false;
+      }
+    } catch {
+      btn.textContent = 'Something went wrong - try again';
+      btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
