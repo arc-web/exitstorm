@@ -12,6 +12,11 @@
 
 ---
 
+## Contents
+- `packages/` - Core monorepo packages (analyzer, core, db, graphics, team-engine)
+- `plans/` - Rebuild and feature plans
+- `ExitStorm.md` - Detailed product spec and scoring reference
+
 ## What is ExitStorm?
 
 ExitStorm takes project ideas and produces financial models, priority scores, team recommendations, and points allocations. It is designed for use by AI agents that read the codebase on GitHub and call the package functions directly - no Discord bot, no web UI, no API server required.
