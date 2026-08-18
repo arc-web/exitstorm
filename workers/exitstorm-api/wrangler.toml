@@ -1,0 +1,16 @@
+name = "exitstorm-api"
+main = "src/index.js"
+compatibility_date = "2026-05-23"
+
+routes = [
+  { pattern = "exitstorm.com/api/*", zone_name = "exitstorm.com" }
+]
+
+[vars]
+FROM_EMAIL = "contact@exitstorm.com"
+OWNER_EMAIL = "me@advertisingreportcard.com"
+ALLOWED_ORIGIN = "https://exitstorm.com"
+
+[[send_email]]
+name = "EMAIL"
+remote = true
