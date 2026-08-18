@@ -137,6 +137,20 @@ blockquote::before { content:'\201C'; position:absolute; left:0; top:-10px; font
 .body-text { font-size:16px; color:var(--muted); line-height:1.7; max-width:700px; margin:0 auto; opacity:0; }
 .img-wrap { margin-top:24px; opacity:0; }
 
+/* Contact */
+.contact-form { width:min(560px,100%); margin:28px auto 0; display:grid; gap:12px; opacity:0; }
+.contact-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.contact-form label { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.contact-form input, .contact-form textarea { width:100%; border:1px solid rgba(148,163,184,0.22); border-radius:12px; background:rgba(15,23,42,0.9); color:var(--text); padding:13px 14px; font:inherit; font-size:14px; outline:none; transition:border-color 0.2s,background 0.2s; }
+.contact-form textarea { min-height:112px; resize:vertical; }
+.contact-form input:focus, .contact-form textarea:focus { border-color:rgba(245,166,35,0.7); background:rgba(15,23,42,0.98); }
+.contact-form button { justify-self:center; border:1px solid rgba(245,166,35,0.45); border-radius:999px; background:rgba(245,166,35,0.16); color:var(--accent); padding:12px 22px; font:inherit; font-size:13px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:background 0.2s,border-color 0.2s; }
+.contact-form button:hover, .contact-form button:focus { background:rgba(245,166,35,0.25); border-color:rgba(245,166,35,0.75); }
+.contact-form button:disabled { cursor:not-allowed; opacity:0.65; }
+.contact-status { min-height:20px; color:var(--muted); font-size:13px; text-align:center; }
+.contact-hp { position:absolute; left:-9999px; opacity:0; }
+@media (max-width:768px){ .contact-row{grid-template-columns:1fr} }
+
 /* Nav */
 #nav { position:fixed; right:32px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:8px; z-index:100; }
 .dot { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.15); cursor:pointer; border:none; padding:0; transition:all 0.3s; }
@@ -339,6 +353,29 @@ blockquote::before { content:'\201C'; position:absolute; left:0; top:-10px; font
       <h2>Mike Ensor<br><span class="grad">Arc Web</span></h2>
       <div class="sub">AI automation, marketing technology, building tools that work.</div>
       <div class="body-text">Mike builds open-source AI tools for agencies, marketers, and operators who are done waiting for software to catch up. All Arc Web projects are open source by default — fork them, extend them, ship them.</div>
+      <form class="contact-form" id="contact-form" novalidate>
+        <input type="hidden" name="source_page" value="https://exitstorm.com/">
+        <div class="contact-hp" aria-hidden="true">
+          <label for="website">Website</label>
+          <input id="website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+        <div class="contact-row">
+          <div>
+            <label for="contact-name">Name</label>
+            <input id="contact-name" name="name" autocomplete="name" placeholder="Name" required>
+          </div>
+          <div>
+            <label for="contact-email">Email</label>
+            <input id="contact-email" name="email" type="email" autocomplete="email" placeholder="Email" required>
+          </div>
+        </div>
+        <div>
+          <label for="contact-message">Message</label>
+          <textarea id="contact-message" name="message" placeholder="What do you want to build or analyze?" required></textarea>
+        </div>
+        <button type="submit">Send message</button>
+        <div class="contact-status" id="contact-status" role="status" aria-live="polite"></div>
+      </form>
     </div>
   </div>
 </div>
@@ -378,7 +415,7 @@ for(let i=0;i<N;i++){const d=document.createElement('button');d.className='dot'+
 
 function updateNav(){document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===cur2));document.getElementById('counter').textContent=(cur2+1)+' / '+N}
 
-function resetSlide(s){const els=s.querySelectorAll('.eyebrow,.line,h1,h2,.sub,.card,.stat,.step,.compare-col,.code-block,blockquote,.hero-badge,.tags-row,.tag,.flow-step,.body-text,.img-wrap,.tl-node,.team-card');gsap.set(els,{opacity:0,clearProps:'transform'})}
+function resetSlide(s){const els=s.querySelectorAll('.eyebrow,.line,h1,h2,.sub,.card,.stat,.step,.compare-col,.code-block,blockquote,.hero-badge,.tags-row,.tag,.flow-step,.body-text,.img-wrap,.tl-node,.team-card,.contact-form');gsap.set(els,{opacity:0,clearProps:'transform'})}
 
 function animIn(s,i){
   const q=sel=>s.querySelectorAll(sel);
@@ -398,7 +435,7 @@ function animIn(s,i){
     for(let k=0;k<n;k++)sndClink(0.4+k*0.12);
   }
 
-  const singles=q('.compare-col,.code-block,blockquote,.body-text,.img-wrap');
+  const singles=q('.compare-col,.code-block,blockquote,.body-text,.img-wrap,.contact-form');
   if(singles.length){
     tl.to(singles,{opacity:1,y:0,duration:0.6},'-=0.1').from(singles,{y:24},'<');
     sndClink(0.4);
@@ -706,6 +743,33 @@ function stopPlay(){
 function togglePlay(){playing?stopPlay():startPlay();}
 
 window.addEventListener('load',()=>{resetSlide(slides[0]);setTimeout(()=>animIn(slides[0],0),150);updateNav();});
+
+const contactForm=document.getElementById('contact-form');
+const contactStatus=document.getElementById('contact-status');
+if(contactForm){
+  contactForm.addEventListener('submit',async event=>{
+    event.preventDefault();
+    const button=contactForm.querySelector('button');
+    const data=Object.fromEntries(new FormData(contactForm).entries());
+    contactStatus.textContent='Sending...';
+    button.disabled=true;
+    try{
+      const response=await fetch('/api/contact',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(data)
+      });
+      const result=await response.json().catch(()=>({ok:false,error:'Unexpected response.'}));
+      if(!response.ok||!result.ok) throw new Error(result.error||'Message could not be sent.');
+      contactForm.reset();
+      contactStatus.textContent='Message sent.';
+    }catch(error){
+      contactStatus.textContent=error.message||'Message could not be sent.';
+    }finally{
+      button.disabled=false;
+    }
+  });
+}
 </script>
 </body>
 </html>
